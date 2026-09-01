@@ -33,9 +33,14 @@ RUN cd dashboard \
     && cd .. \
     && bash build_dashboard.sh
 
-# Fix Python 2 exception syntax in current main branch
+# Fix Python 2 exception syntax
 RUN sed -i \
     's/except ValueError, socket.gaierror:/except (ValueError, socket.gaierror):/' \
+    main.py
+
+# Force external binding for Railway
+RUN sed -i \
+    's/bind_args\["host"\] = ip/bind_args["host"] = "0.0.0.0"/' \
     main.py
 
 # Install Python dependencies
